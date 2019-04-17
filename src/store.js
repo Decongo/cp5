@@ -7,9 +7,9 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     week: null,
-    weeks: null,
+    weeks: [],
     month: null,
-    months: null
+    months: []
   },
   mutations: {
     setWeek(state, week) {
@@ -80,6 +80,7 @@ export default new Vuex.Store({
     },
     async updateWeek(context, week) {
       try {
+        console.log(week);
         await axios.put("/api/weeks" + week._id, {
           title: this.week.title,
           days: this.week.days
@@ -105,7 +106,6 @@ export default new Vuex.Store({
     async deleteWeek(context, week) {
       try {
         await axios.delete("/api/weeks/" + week._id);
-        this.getWeeks();
         return true;
       } catch (error) {
         console.log(error);
