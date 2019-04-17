@@ -1,9 +1,14 @@
 <template>
   <div id="app">
     <div id="nav">
-      <router-link to="/" class="navItem">Home</router-link>|
+      <router-link to="/">
+        <p class="navItem">
+          <strong>When is better</strong>
+        </p>
+      </router-link>|
       <router-link to="/weeks" class="navItem">My Weeks</router-link>|
-      <router-link to="/months" class="navItem">My Months</router-link>
+      <router-link to="/months" class="navItem">My Months</router-link>|
+      <LoginLogout class="navItem"/>
     </div>
     <router-view/>
     <footer>
@@ -15,6 +20,16 @@
   </div>
 </template>
 
+<script>
+import LoginLogout from "@/components/LoginLogout.vue";
+export default {
+  components: {
+    LoginLogout
+  }
+};
+</script>
+
+
 <style>
 body {
   background-color: #eeeeee;
@@ -25,10 +40,16 @@ body {
 
 #nav {
   background-color: #949494;
-  padding: 1% 2% 1% 2%;
+  padding: 0 2%;
+}
+#nav p {
+  border: 1px solid black;
+  display: inline-block;
+  padding: 1% 2%;
 }
 .navItem {
   padding: 1% 2% 1% 2%;
+  display: inline-block;
   text-decoration: none;
   color: black;
   font-size: small;

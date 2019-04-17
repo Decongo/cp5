@@ -6,12 +6,16 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
+    user: null,
     week: null,
     weeks: [],
     month: null,
     months: []
   },
   mutations: {
+    setUser(state, user) {
+      state.user = user;
+    },
     setWeek(state, week) {
       state.week = week;
     },
@@ -21,11 +25,47 @@ export default new Vuex.Store({
     setMonth(state, month) {
       state.month = month;
     },
-    setMonths(state, month) {
-      state.month = month;
+    setMonths(state, months) {
+      state.months = months;
     }
   },
   actions: {
+    async register(context, data) {
+      try {
+        let response = await axios.post("/api/users", data);
+        context.commit('setUser', response.data);
+        return "";
+      } catch (error) {
+        return error.response.data.message;
+      }
+    },
+    async login(context, data) {
+      try {
+        let response = await axios.post("/api/users/login", data);
+        context.commit('setUser', response.data);
+        return "";
+      } catch (error) {
+        return error.response.data.message;
+      }
+    },
+    async logout(context) {
+      try {
+        await axios.delete("/api/users");
+        context.commit('setUser', null);
+        return "";
+      } catch (error) {
+        return error.response.data.message;
+      }
+    },
+    async getUser(context) {
+      try {
+        let response = await axios.get("/api/users");
+        context.commit('setUser', response.data);
+        return "";
+      } catch (error) {
+        return "";
+      }
+    },
     async getWeek(context, id) {
       try {
         let response = await axios.get("/api/weeks/" + id);
@@ -80,12 +120,11 @@ export default new Vuex.Store({
     },
     async updateWeek(context, week) {
       try {
+        console.log("update");
         console.log(week);
-        await axios.put("/api/weeks" + week._id, {
-          title: this.week.title,
-          days: this.week.days
+        await axios.put("/api/weeks/" + week._id, {
+          days: this.week.days,
         });
-        this.getWeeks();
         return "";
       } catch (error) {
         return "";
@@ -93,7 +132,7 @@ export default new Vuex.Store({
     },
     async updateMonth(context, month) {
       try {
-        await axios.put("/api/months" + month._id, {
+        await axios.put("/api/months/" + month._id, {
           title: this.month.title,
           weeks: this.month.weeks
         });
@@ -106,6 +145,7 @@ export default new Vuex.Store({
     async deleteWeek(context, week) {
       try {
         await axios.delete("/api/weeks/" + week._id);
+        context.commit('setWeek', null);
         return true;
       } catch (error) {
         console.log(error);
@@ -114,7 +154,7 @@ export default new Vuex.Store({
     async deleteMonth(context, month) {
       try {
         await axios.delete("/api/months/" + month._id);
-        this.getMonths();
+        context.commit('setMonth', null);
         return true;
       } catch (error) {
         console.log(error);

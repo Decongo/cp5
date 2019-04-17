@@ -7,13 +7,8 @@ const daySchema = new mongoose.Schema({
     isSelected: Boolean
 });
 
-const weekSchema = new mongoose.Schema({
-    days: [daySchema],
-    isSelected: Boolean
-});
-
 const monthSchema = new mongoose.Schema({
-    weeks: [weekSchema],
+    days: [daySchema],
     title: String
 });
 
@@ -43,12 +38,12 @@ router.get('/', async (req, res) => {
 });
 
 router.post('/', async (req, res) => {
-    const month = new Month({
-        weeks: req.body.weeks,
-        title: req.body.title
-    });
     try {
-        await Month.save();
+        const month = new Month({
+            days: req.body.days,
+            title: req.body.title
+        });
+        await month.save();
         res.send(month);
     } catch (error) {
         console.log(error);
@@ -62,7 +57,7 @@ router.put('/:id', async (req, res) => {
             _id: req.params.id
         });
         month.title = req.body.title;
-        month.weeks = req.body.weeks;
+        month.days = req.body.days;
         month.save();
         res.sendStatus(200);
     } catch (error) {

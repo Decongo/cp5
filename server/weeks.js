@@ -56,12 +56,13 @@ router.post('/', async (req, res) => {
 });
 
 router.put('/:id', async (req, res) => {
+    console.log("Got here");
     try {
         let week = await Week.findOne({
             _id: req.params.id
         });
-        week.title = req.body.title;
         week.days = req.body.days;
+
         week.save();
         res.sendStatus(200);
     } catch (error) {

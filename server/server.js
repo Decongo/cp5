@@ -11,6 +11,12 @@ mongoose.connect('mongodb://localhost:27017/schedule_full', {
     useNewUrlParser: true
 });
 
+const cookieParser = require("cookie-parser");
+app.use(cookieParser());
+
+const users = require("./users.js");
+app.use("/api/users", users.routes);
+
 const weeks = require("./weeks.js");
 app.use("/api/weeks", weeks.routes);
 

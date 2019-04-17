@@ -1,27 +1,24 @@
 <template>
   <div>
-    <h1>My Weeks</h1>
-    <div v-if="!weeks.length">
-      <button @click="initWeek">Create a schedule</button>
-    </div>
-    <div v-else>
+    <div v-if="user">
       <div class="button-group">
         <button class="card" type="button" @click="saveWeek()">
           <h2>Save</h2>
-        </button>
-        <button class="card" type="button" @click="getWeek()">
-          <h2>Load</h2>
         </button>
         <button class="card" type="button" @click="deleteWeek()">
           <h2>Delete</h2>
         </button>
       </div>
       <div class="display">
-        <div
-          v-for="week in weeks"
-          v-bind:key="week.title"
-          @click="selectWeek(week.title)"
-        >{{week.title}}</div>
+        <div class="myEvents">
+          <h3>My Events:</h3>
+          <div
+            v-for="week in weeks"
+            v-bind:key="week.title"
+            @click="selectWeek(week.title)"
+            class="card"
+          >{{week.title}}</div>
+        </div>
         <form>
           <input v-model="week.title" type="text" placeholder="Give your schedule a name...">
         </form>
@@ -127,6 +124,13 @@
         </div>
       </div>
     </div>
+    <div v-else>
+      <p>Please register for an account or login.</p>
+      <div class="choice">
+        <router-link to="/register" class="button-link">Register</router-link>
+        <router-link to="/login" class="button-link">Login</router-link>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -149,13 +153,21 @@ export default {
     },
     storedWeek() {
       return this.$store.state.week;
+    },
+    user() {
+      return this.$store.state.user;
     }
   },
   async created() {
+    this.initWeek();
     await this.$store.dispatch("getWeeks");
   },
   methods: {
     initWeek() {
+      if (this.week.days) {
+        this.week.days = [];
+        this.week.title = "";
+      }
       for (let i = 0; i < 7; ++i) {
         let hours = [];
         for (let j = 6; j < 22; j++) {
@@ -190,29 +202,31 @@ export default {
       }
       try {
         await this.$store.dispatch("getWeek", id);
-        this.week = this.storedWeek;
+        this.week.title = this.storedWeek.title;
+        this.week.days = this.storedWeek.days;
+        this.week._id = this.storedWeek._id;
       } catch (error) {
         console.log(error);
       }
     },
     async saveWeek() {
-      console.log("save");
-      console.log(this.week);
       try {
-        if (!this.weeks.length) {
-          console.log("create!");
-          await this.$store.dispatch("createWeek", this.week);
-        } else {
+        if (this.storedWeek && this.storedWeek.title == this.week.title) {
           console.log("update");
           await this.$store.dispatch("updateWeek", this.week);
+        } else {
+          console.log("create");
+          await this.$store.dispatch("createWeek", this.week);
         }
+        await this.$store.dispatch("getWeeks");
+        this.initWeek();
       } catch (error) {
         console.log(error);
       }
     },
     async deleteWeek() {
       try {
-        await this.$store.dispatch("deleteWeek", this.week);
+        await this.$store.dispatch("deleteWeek", this.storedWeek);
         await this.$store.dispatch("getWeeks");
       } catch (error) {
         console.log(error);
@@ -275,10 +289,24 @@ input {
   transition: 0.3s;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
 }
-
 .card:hover {
   box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
   cursor: pointer;
+}
+
+.choice {
+  text-align: center;
+  padding: 3%;
+}
+
+.button-link {
+  color: black;
+  text-decoration: none;
+  padding: 1%;
+  margin: 5%;
+  background-color: white;
+  transition: 0.3s;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
 }
 
 p {
@@ -308,6 +336,13 @@ h2 {
 
 .selected {
   background-color: #c0c7ff;
+}
+.myEvents {
+  margin-left: 10%;
+}
+.myEvents .card {
+  display: inline-block;
+  margin-right: 1%;
 }
 </style>
 
