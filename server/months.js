@@ -1,6 +1,10 @@
 const mongoose = require('mongoose');
 const express = require("express");
 const router = express.Router();
+const auth = require("./auth.js");
+
+const users = require("./users.js");
+const User = users.model;
 
 const daySchema = new mongoose.Schema({
     date: Number,
@@ -9,17 +13,21 @@ const daySchema = new mongoose.Schema({
 
 const monthSchema = new mongoose.Schema({
     days: [daySchema],
-    title: String
+    title: String,
+    user: {
+        type: mongoose.Schema.ObjectId,
+        ref: 'User'
+    }
 });
 
 const Month = mongoose.model('Month', monthSchema);
 
 
-router.get('/:id', async (req, res) => {
+router.get('/:id', auth.verifyToken, User.verify, async (req, res) => {
     try {
         let month = await Month.findOne({
             _id: req.params.id
-        });
+        }).populate('user');
         res.send(month);
     } catch (error) {
         console.log(error);
@@ -27,9 +35,11 @@ router.get('/:id', async (req, res) => {
     }
 });
 
-router.get('/', async (req, res) => {
+router.get('/', auth.verifyToken, User.verify, async (req, res) => {
     try {
-        let months = await Month.find();
+        let months = await Month.find({
+            user: req.user
+        });
         res.send(months);
     } catch (error) {
         console.log(error);
@@ -37,11 +47,12 @@ router.get('/', async (req, res) => {
     }
 });
 
-router.post('/', async (req, res) => {
+router.post('/', auth.verifyToken, User.verify, async (req, res) => {
     try {
         const month = new Month({
             days: req.body.days,
-            title: req.body.title
+            title: req.body.title,
+            user: req.user
         });
         await month.save();
         res.send(month);
@@ -51,7 +62,7 @@ router.post('/', async (req, res) => {
     }
 });
 
-router.put('/:id', async (req, res) => {
+router.put('/:id', auth.verifyToken, User.verify, async (req, res) => {
     try {
         let month = await Month.findOne({
             _id: req.params.id
@@ -66,7 +77,7 @@ router.put('/:id', async (req, res) => {
     }
 });
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', auth.verifyToken, User.verify, async (req, res) => {
     try {
         await Month.deleteOne({
             _id: req.params.id

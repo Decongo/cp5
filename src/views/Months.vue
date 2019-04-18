@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="main-content">
     <div v-if="user">
       <div class="button-group">
         <button class="card" type="button" @click="saveMonth()">
@@ -34,9 +34,11 @@
       </div>
     </div>
     <div v-else>
-      <p>If you would like to upload photos, please register for an account or login.</p>
-      <router-link to="/register" class="pure-button">Register</router-link>or
-      <router-link to="/login" class="pure-button">Login</router-link>
+      <p>Please register for an account or login.</p>
+      <div class="choice">
+        <router-link to="/register" class="button-link">Register</router-link>
+        <router-link to="/login" class="button-link">Login</router-link>
+      </div>
     </div>
   </div>
 </template>
@@ -199,6 +201,18 @@ input {
 
 .title {
   text-align: center;
+  -webkit-user-select: none;
+  /* Chrome all / Safari all */
+  -moz-user-select: none;
+  /* Firefox all */
+  -ms-user-select: none;
+  /* IE 10+ */
+  user-select: none;
+  /* Likely future */
+}
+p {
+  text-align: center;
+  margin: 5px;
   -webkit-user-select: none;
   /* Chrome all / Safari all */
   -moz-user-select: none;

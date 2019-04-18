@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="main-content center">
     <h1>Register for an account</h1>
     <form @submit.prevent="register" class="pure-form pure-form-aligned">
       <fieldset>
@@ -48,7 +48,7 @@ export default {
           username: this.username,
           password: this.password
         });
-        if (this.error === "") this.$router.push("mypage");
+        if (this.error === "") this.$router.push("/");
       } catch (error) {
         console.log(error);
       }

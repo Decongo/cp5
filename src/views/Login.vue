@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="main-content center">
     <h1>Login to your account</h1>
     <form @submit.prevent="login" class="pure-form pure-form-aligned">
       <fieldset>

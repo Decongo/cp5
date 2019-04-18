@@ -1,7 +1,10 @@
 <template>
   <div>
     <div v-if="user" @click="logout()" class="w">Log out</div>
-    <router-link v-else to="/login" class="w">Log in</router-link>
+    <div v-else>
+      <router-link to="/login" class="w">Log in</router-link>|
+      <router-link to="/register" class="w">Register</router-link>
+    </div>
   </div>
 </template>
 
@@ -27,8 +30,13 @@ export default {
 
 <style scoped>
 .w {
-  width: 100%;
   text-decoration: none;
   color: black;
+  display: inline-block;
+  padding: 1% 2% 1% 2%;
+  font-size: small;
+}
+.w:hover {
+  background-color: #c0c7ff;
 }
 </style>

@@ -8,7 +8,7 @@
       </router-link>|
       <router-link to="/weeks" class="navItem">My Weeks</router-link>|
       <router-link to="/months" class="navItem">My Months</router-link>|
-      <LoginLogout class="navItem"/>
+      <LoginLogout class="multi-button"/>
     </div>
     <router-view/>
     <footer>
@@ -31,11 +31,37 @@ export default {
 
 
 <style>
+.center {
+  text-align: center;
+}
+.multi-button {
+  width: 25%;
+  display: inline-block;
+}
+
+.choice {
+  text-align: center;
+  padding: 3%;
+}
+
+.button-link {
+  color: black;
+  text-decoration: none;
+  padding: 1%;
+  margin: 5%;
+  background-color: white;
+  transition: 0.3s;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+}
 body {
   background-color: #eeeeee;
   margin: 0;
   padding: 0;
   font-family: Arial, Helvetica, sans-serif;
+}
+
+.main-content {
+  min-height: 81vh;
 }
 
 #nav {

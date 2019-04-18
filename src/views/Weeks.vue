@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="main-content">
     <div v-if="user">
       <div class="button-group">
         <button class="card" type="button" @click="saveWeek()">
@@ -292,21 +292,6 @@ input {
 .card:hover {
   box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
   cursor: pointer;
-}
-
-.choice {
-  text-align: center;
-  padding: 3%;
-}
-
-.button-link {
-  color: black;
-  text-decoration: none;
-  padding: 1%;
-  margin: 5%;
-  background-color: white;
-  transition: 0.3s;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
 }
 
 p {

@@ -1,5 +1,5 @@
 <template>
-  <div class="home">
+  <div class="main-content">
     <div class="center">
       <h1>When is better</h1>
       <p>Mark the days you are free, send the schedule to others!</p>
@@ -18,9 +18,6 @@ export default {
 <style scoped>
 .home {
   height: 80vh;
-}
-.center {
-  text-align: center;
 }
 .card {
   width: 120px;
